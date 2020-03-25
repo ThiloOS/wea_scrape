@@ -14,7 +14,7 @@ else:
 print()
 
 file_name_input = input('filename: ')
-file_name = file_name_input + '.txt'
+file_name = file_name_input + '.json'
 
 soup = BeautifulSoup(page.content ,'html.parser')
 
@@ -46,15 +46,25 @@ def built_date(input):
 def location(input):
     return re.sub(r"(?<=\w)([A-Z])", r" \1", input)
 
+# Format WEA type
+def type(input):
+    input = input.replace(',', '.')
+    list = input.replace(')', '),').split(',')
+    list.pop()
+    return list
+
 
 data = []
 for i in range(len(wrapper)-1):
-    dict = {'name':letters(wrapper[i+1][0]), 'built':built_date(wrapper[i+1][1]), 'in_use':True, 'power':wrapper[i+1][2], 'number':wrapper[i+1][3], 'type':wrapper[i+1][4], 'location':location(wrapper[i+1][5]), 'zip':wrapper[i+1][6], 'coordinates':wrapper[i+1][7], 'owner':wrapper[i+1][8]}
+    dict = {'name':letters(wrapper[i+1][0]), 'built':built_date(wrapper[i+1][1]), 'in_use':True, 'power':wrapper[i+1][2], 'number':wrapper[i+1][3], 'type':type(wrapper[i+1][4]), 'location':location(wrapper[i+1][5]), 'zip':wrapper[i+1][6], 'coordinates':wrapper[i+1][7], 'owner':wrapper[i+1][8]}
     data.append(dict)
 
     
-with open(file_name , 'w') as json_file:
-    json.dump(data, json_file, indent=4)
+with open(file_name , 'w', encoding='utf8') as json_file:
+    json.dump(data, json_file, ensure_ascii=False, indent=3)
     print('file created')
+
+
+
 
    
