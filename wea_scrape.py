@@ -53,15 +53,20 @@ def type(input):
     list.pop()
     return list
 
+def coordinates(input):
+    return input.split(',') 
+    #return ''.join([i for i in input if i.isdigit()])
+
+
 
 data = []
 for i in range(len(wrapper)-1):
-    dict = {'name':letters(wrapper[i+1][0]), 'built':built_date(wrapper[i+1][1]), 'in_use':True, 'power':wrapper[i+1][2], 'number':wrapper[i+1][3], 'type':type(wrapper[i+1][4]), 'location':location(wrapper[i+1][5]), 'zip':wrapper[i+1][6], 'coordinates':wrapper[i+1][7], 'owner':wrapper[i+1][8]}
+    dict = {'name':letters(wrapper[i+1][0]), 'built':built_date(wrapper[i+1][1]), 'in_use':True, 'power':wrapper[i+1][2], 'number':wrapper[i+1][3], 'type':type(wrapper[i+1][4]), 'location':location(wrapper[i+1][5]), 'zip':wrapper[i+1][6], 'coordinates':coordinates(wrapper[i+1][7]), 'owner':wrapper[i+1][8]}
     data.append(dict)
 
     
 with open(file_name , 'w', encoding='utf8') as json_file:
-    json.dump(data, json_file, ensure_ascii=False, indent=3)
+    json.dump(data, json_file, ensure_ascii=False, indent=4)
     print('file created')
 
 
