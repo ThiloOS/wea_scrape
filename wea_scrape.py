@@ -2,10 +2,9 @@ import requests, re, json
 from bs4 import BeautifulSoup
 
 print()
-URL = input('paste url here: ')
+URL = 'https://de.wikipedia.org/wiki/Liste_von_Windkraftanlagen_in_Bremen,_Hamburg_und_Niedersachsen'#input('paste url here: ')
 page = requests.get(URL)
 print()
-
 
 if page.status_code == 200:
     print('success. status code ' + str(page.status_code))
@@ -13,7 +12,7 @@ else:
     print('error. status code ' + str(page.status_code))
 print()
 
-file_name_input = input('filename: ')
+file_name_input =  'test'#input('filename: ')
 file_name = file_name_input + '.json'
 
 soup = BeautifulSoup(page.content ,'html.parser')
@@ -27,7 +26,6 @@ for row in table.find_all('tr'):
     for cell in row.find_all('td'):
         wea.append(cell.text.rstrip('\n'))
     wrapper.append(wea)   
-
 
 # Format WEA Names
 # Removing digits & '[' & ']'
@@ -53,18 +51,15 @@ def type(input):
     list.pop()
     return list
 
-def coordinates(input):
-    return input.split(',') 
-    #return ''.join([i for i in input if i.isdigit()])
+# Format and transform coordinates
 
 
 
 data = []
 for i in range(len(wrapper)-1):
-    dict = {'name':letters(wrapper[i+1][0]), 'built':built_date(wrapper[i+1][1]), 'in_use':True, 'power':wrapper[i+1][2], 'number':wrapper[i+1][3], 'type':type(wrapper[i+1][4]), 'location':location(wrapper[i+1][5]), 'zip':wrapper[i+1][6], 'coordinates':coordinates(wrapper[i+1][7]), 'owner':wrapper[i+1][8]}
+    dict = {'name':letters(wrapper[i+1][0]), 'built':built_date(wrapper[i+1][1]), 'in_use':True, 'power':wrapper[i+1][2], 'number':wrapper[i+1][3], 'type':type(wrapper[i+1][4]), 'location':location(wrapper[i+1][5]), 'zip':wrapper[i+1][6], 'coordinates':wrapper[i+1][7], 'owner':wrapper[i+1][8]}
     data.append(dict)
 
-    
 with open(file_name , 'w', encoding='utf8') as json_file:
     json.dump(data, json_file, ensure_ascii=False, indent=4)
     print('file created')
